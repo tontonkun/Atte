@@ -5,32 +5,34 @@
 @endsection
 
 @section('content')
-<div class="attendance__alert">
-    // メッセージ機能
+
+<div class="titleArea">
+    <div class="title">
+        {{ $userName }}さん　お疲れ様！
+    </div>
 </div>
 
-<div class="attendance__content">
-    <div class="attendance__panel">
-        <form class="attendance__button">
-            <button class="attendance__button-submit" type="submit">勤務開始</button>
-        </form>
-        <form class="attendance__button">
-            <button class="attendance__button-submit" type="submit">勤務終了</button>
-        </form>
-    </div>
-    <div class="attendance-table">
-        <table class="attendance-table__inner">
-            <tr class="attendance-table__row">
-                <th class="attendance-table__header">名前</th>
-                <th class="attendance-table__header">開始時間</th>
-                <th class="attendance-table__header">終了時間</th>
-            </tr>
-            <tr class="attendance-table__row">
-                <td class="attendance-table__item">サンプル太郎</td>
-                <td class="attendance-table__item">サンプル</td>
-                <td class="attendance-table__item">サンプル</td>
-            </tr>
-        </table>
-    </div>
+<div class="buttonArea">
+    <form class="form" action="/start_work" method="POST">
+        @csrf
+        <button id="startWorkButton" class="workStart" type="submit" {{ $workStartDisabled ? 'disabled' : '' }}>勤務開始</button>
+    </form>
+
+    <form class="form" action="/end_work" method="POST">
+        @csrf
+        <button id="endWorkButton" class="workEnd" type="submit" {{ $workEndDisabled ? 'disabled' : '' }}>勤務終了</button>
+    </form>
+</div>
+
+<div class="buttonArea">
+    <form class="form" action="/start_rest" method="POST">
+        @csrf
+        <button id="startRestButton" class="restStart" type="submit" {{ $restStartDisabled ? 'disabled' : '' }}>休憩開始</button>
+    </form>
+
+    <form class="form" action="/end_rest" method="POST">
+        @csrf
+        <button id="endRestButton" class="restEnd" type="submit" {{ $restEndDisabled ? 'disabled' : '' }}>休憩終了</button>
+    </form>
 </div>
 @endsection

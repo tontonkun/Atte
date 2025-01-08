@@ -1,69 +1,87 @@
-.attendance__alert--success {
-    padding: 10px 30px;
-    border-color: #badbcc;
-    background-color: #d1e7dd;
-    color: #0f5132;
-}
+/* login.css */
 
-.attendance__alert--danger {
-    padding: 10px 0;
-    border-color: #f5c2c7;
-    background-color: #f8d7da;
-    color: #842029;
-}
-
-.attendance__alert--danger ul {
-    margin: 0;
-}
-
-.attendance__panel {
-    margin: 0 auto;
-    width: 70%;
-}
-
-.attendance__button {
-    width: 100%;
-    text-align: center;
-}
-
-.attendance__button-submit {
-    padding: 5px;
-    width: 30%;
-    height: 50px;
-    border: none;
-    border-radius: 3px;
-    background: #000;
-    color: #fff;
-    cursor: pointer;
-}
-
-.attendance__content {
-    margin: 0 auto;
-    padding: 30px 15px;
-    max-width: 1230px;
-}
-
-.attendance-table {
-    margin: 30px auto;
-    width: 70%;
-    text-align: center;
-}
-
-.attendance-table__inner {
-    width: 100%;
-}
-
-.attendance-table__row {
-    border-bottom: 1px solid #ddd;
-}
-
-.attendance-table__header {
-    padding: 12px;
-    width: 20%;
+/* 他のスタイルも適宜調整 */
+.header {
+    font-size: 30px;
+    align-items: center;
     font-weight: bold;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
 }
 
-.attendance-table__item {
-    padding: 12px;
-    width: 20%;
+.headerTitle {
+    margin-left: 20px;
+}
+
+.headerLinks {
+    text-decoration: none;
+    font-size: 15px;
+    display: flex;
+}
+
+.header-nav__button {
+    background: none;
+    border: none;
+    color: black;
+    cursor: pointer;
+    font: inherit;
+    padding: 5px;
+    width: 120px;
+}
+
+.main {
+    background-color: #f1f1f1;
+    text-align: center;
+    height: 450px;
+    margin: auto;
+}
+
+.form {
+    max-width: 80%;
+    margin: 0 auto;
+}
+
+.titleArea {
+    margin: auto;
+    height: 50px;
+    padding: 15px;
+}
+
+.title {
+    font-size: 20px;
+    /* 必要に応じてフォントサイズを調整 */
+    font-weight: bold;
+    /* タイトルを太字にする */
+    text-align: center;
+    /* タイトルを中央揃えにする */
+    align-items: center;
+}
+
+.buttonArea {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px auto;
+    width: 80%;
+    height: 150px;
+}
+
+.form {
+    width: 40%;
+    height: 100%;
+}
+
+.buttonArea button {
+    font-size: 25px;
+    font-weight: bold;
+    width: 100%;
+    height: 100%;
+    border: none;
+    cursor: pointer;
+    background-color: white;
+}
+
+button[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
 }

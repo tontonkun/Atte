@@ -1,60 +1,68 @@
-.login-form__content {
-    margin: 0 auto;
-    padding: 30px 15px;
-    max-width: 1230px;
+/* ページ全体のレイアウト */
+body,
+html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
 }
 
-.login-form__heading {
-    margin-bottom: 20px;
-    text-align: center;
-}
-
+/* フォーム全体 */
 .form {
-    margin: 0 auto;
-    width: 25%;
+    flex: 1;
+    /* フォームが画面全体を埋めるように設定 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* 中央に配置 */
+    align-items: center;
+    /* 横方向に中央に配置 */
+}
+
+/* ヘッダー部分 */
+.titleArea {
     text-align: center;
+    margin: 20px;
+    font-weight: bold;
 }
 
-.form__group {
-    margin-bottom: 5px;
+.inputArea input {
+    width: 200px;
+    height: 25px;
+    margin: 5px auto;
+    background-color: #f1f1f1;
+    border: 1px solid #aca9a9;
+    border-radius: 3px;
+    font-size: 15px;
+    padding: 5px;
 }
 
-.form__group-title {
-    text-align: left;
-}
-
+/* エラー表示部分 */
 .form__error {
-    height: 20px;
-    color: #ff0000;
-    text-align: left;
+    color: red;
+    margin-top: 5px;
 }
 
-.form__input--text input {
-    padding: 10px;
-    width: 100%;
-    height: 40px;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-
-    appearance: none;
-}
-
-.form__button {
+/* ボタンのスタイル */
+.loginButton {
+    width: 200px;
+    height: 30px;
+    padding: 3px 20px;
+    font-size: 15px;
+    background-color: blue;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
     margin-top: 20px;
 }
 
-.form__button-submit {
-    padding: 10px;
-    width: 30%;
-    height: 50px;
-    border: none;
-    border-radius: 3px;
-    background: #000;
-    color: #fff;
-    cursor: pointer;
-}
-
-.register__link {
+/* 登録リンクのスタイル */
+.annonceForNoAccount {
     margin-top: 20px;
     text-align: center;
+}
+
+.registerLink {
+    color: blue;
 }
