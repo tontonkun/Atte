@@ -16,25 +16,7 @@
         <div class="headerTitle">
             Atte
         </div>
-        <div class="headerLinks">
-            <form class="form" action="/" method="GET">
-                @csrf
-                <button class="header-nav__button">ホーム</button>
-            </form>
-            <form class="form" action="/time_record" method="GET">
-                @csrf
-                <button class="header-nav__button">日付一覧</button>
-            </form>
-            <form class="form" action="/user_list" method="GET">
-                @csrf
-                <button class="header-nav__button">ユーザー一覧</button>
-            </form>
-            <form class="form" action="{{ route('logout') }}" method="POST">
-                @csrf
-                <button class="header-nav__button">ログアウト</button>
-            </form>
-
-        </div>
+        @yield('headerLinks')
     </div>
 
     <div class="main">
