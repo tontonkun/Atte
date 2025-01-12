@@ -9,10 +9,10 @@ use Carbon\Carbon; // Carbonをインポート
 
 class TimeRecordController extends Controller
 {
-   public function __construct()
-   {
-      $this->middleware('auth');
-   }
+   // public function __construct()
+   // {
+   //    $this->middleware('auth');
+   // }
 
    public function timeRecord()
    {
@@ -24,7 +24,8 @@ class TimeRecordController extends Controller
       $works = Work::where('user_id', $userId)
          ->whereDate('work_date', $work_date)
          ->with(['user', 'rests']) // リレーションをロード
-         ->paginate(5);
+         ->paginate(5)
+         ->appends(['date' => $work_date, 'user_id' => $userId]);
 
       $totalDuration = 0;
 
@@ -53,8 +54,8 @@ class TimeRecordController extends Controller
             $work->total_work_duration = $this->formatDuration($totalWorkDuration);
 
          } else {
-            $work->formatted_duration = '休憩中'; // 開始・終了時刻が不明な場合
-            $work->total_work_duration = '勤務中';
+            $work->formatted_duration = 'ー'; // 開始・終了時刻が不明な場合
+            $work->total_work_duration = 'ー';
          }
       }
 
@@ -67,31 +68,32 @@ class TimeRecordController extends Controller
 
    public function yesterday(Request $request)
    {
-      // 日付とユーザーIDを取得
       $work_date = Carbon::parse($request->date)->subDay()->format('Y-m-d');
       $user = User::findOrFail($request->user_id);
-      // 勤怠情報を取得
-      $works = $user->works()->where('work_date', $work_date)->paginate(10);
 
-      // デバッグのために dd($works) を追加 
-      dd($works);
+      // 'rests' を読み込む
+      $works = $user->works()->where('work_date', $work_date)->with('rests')->paginate(5)->appends(['date' => $work_date, 'user_id' => $user->id]);
+
+      // 勤務時間と休憩時間を計算
+      $this->calculateDurations($works, $work_date);
 
       return view('time_record', compact('works', 'work_date', 'user'));
    }
 
    public function tomorrow(Request $request)
    {
-      // 日付とユーザーIDを取得
       $work_date = Carbon::parse($request->date)->addDay()->format('Y-m-d');
       $user = User::findOrFail($request->user_id);
-      // 勤怠情報を取得
-      $works = $user->works()->where('work_date', $work_date)->paginate(10);
 
-      // デバッグのために dd($works) を追加
-      dd($works);
+      // 'rests' を読み込む
+      $works = $user->works()->where('work_date', $work_date)->with('rests')->paginate(5)->appends(['date' => $work_date, 'user_id' => $user->id]);
+
+      // 勤務時間と休憩時間を計算
+      $this->calculateDurations($works, $work_date);
 
       return view('time_record', compact('works', 'work_date', 'user'));
    }
+
 
 
    private function calculateDurations($works, $work_date)

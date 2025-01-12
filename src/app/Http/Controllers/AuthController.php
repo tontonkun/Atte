@@ -1,11 +1,11 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Work;
 use App\Models\Rest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
@@ -25,11 +25,11 @@ class AuthController extends Controller
             ->whereNull('break_end_time') // まだ終了していない休憩を確認
             ->first();
 
-        // ボタンの有効/無効を決定
-        $workStartDisabled = !is_null($currentWork);
-        $workEndDisabled = is_null($currentWork);
-        $restStartDisabled = is_null($currentWork) || !is_null($currentRest);
-        $restEndDisabled = is_null($currentRest);
+        // セッションからボタンの状態を取得
+        $workStartDisabled = Session::get('workStartDisabled', !is_null($currentWork));
+        $workEndDisabled = Session::get('workEndDisabled', is_null($currentWork));
+        $restStartDisabled = Session::get('restStartDisabled', is_null($currentWork) || !is_null($currentRest));
+        $restEndDisabled = Session::get('restEndDisabled', is_null($currentRest));
 
         $userName = Auth::user()->name;
 
@@ -49,103 +49,106 @@ class AuthController extends Controller
             'start_at' => $currentTime,
         ]);
 
-        return $this->firstHomePage(); // 状態を更新してビューを返す
+        // セッションに状態を保存
+        Session::put('workStartDisabled', true);
+        Session::put('workEndDisabled', false);
+        Session::put('restStartDisabled', false);
+        Session::put('restEndDisabled', true);
+
+        // 状態を更新してビューを返す
+        $workStartDisabled = true;
+        $workEndDisabled = false;
+        $restStartDisabled = false;
+        $restEndDisabled = true;
+
+        return view('index', compact('workStartDisabled', 'workEndDisabled', 'restStartDisabled', 'restEndDisabled', 'userName'));
     }
 
     public function afterEndWork(Request $request)
     {
-        // ログインしているユーザーのIDを取得
         $userId = auth()->id();
-
         $userName = Auth::user()->name;
+        $currentDate = now()->format('Y-m-d');
+        $currentTime = now()->format('H:i:s');
 
-        // 現在の日付と時刻を取得
-        $currentDate = now()->format('Y-m-d'); // 必要に応じてフォーマットを変更
-        $currentTime = now()->format('H:i:s'); // 必要に応じてフォーマットを変更
-
-        // 作業を終了するために、該当するworkレコードを取得
-        $currentWork = work::where('user_id', $userId)
+        $currentWork = Work::where('user_id', $userId)
             ->where('work_date', $currentDate)
-            ->whereNull('end_at') // まだ終了していない作業を確認
+            ->whereNull('end_at')
             ->first();
 
         if ($currentWork) {
-            // end_atを更新
             $currentWork->end_at = $currentTime;
             $currentWork->save();
         } else {
-            // 作業が見つからない場合のエラーハンドリング
             return redirect()->back()->withErrors('現在の作業が見つかりません。');
         }
 
+        // セッションに状態を保存
+        Session::put('workStartDisabled', false);
+        Session::put('workEndDisabled', true);
+        Session::put('restStartDisabled', true);
+        Session::put('restEndDisabled', true);
+
+        // 状態を更新してビューを返す
         $workStartDisabled = false;
         $workEndDisabled = true;
         $restStartDisabled = true;
         $restEndDisabled = true;
+
         return view('index', compact('workStartDisabled', 'workEndDisabled', 'restStartDisabled', 'restEndDisabled', 'userName'));
     }
 
     public function afterStartRest(Request $request)
     {
-        // ログインしているユーザーのIDを取得
         $userId = auth()->id();
-
         $userName = Auth::user()->name;
+        $currentDate = now()->format('Y-m-d');
+        $currentTime = now()->format('H:i:s');
 
-        // 現在の日付と時刻を取得
-        $currentDate = now()->format('Y-m-d'); // 必要に応じてフォーマットを変更
-        $currentTime = now()->format('H:i:s'); // 必要に応じてフォーマットを変更
-
-        // user_id と work_date を work テーブルから取得
         $work = Work::where('user_id', $userId)
             ->where('work_date', $currentDate)
             ->first();
 
-        // work が存在する場合にのみデータを挿入
         if ($work) {
-            rest::create([
-                'work_id' => $work->id, // work テーブルの ID を使用
+            Rest::create([
+                'work_id' => $work->id,
                 'break_start_time' => $currentTime,
             ]);
         } else {
-            // エラーハンドリングやメッセージをここに追加
             return redirect()->back()->withErrors(['message' => '作業データが見つかりません。先に作業を登録してください。']);
         }
 
+        // セッションに状態を保存
+        Session::put('workEndDisabled', true);
+        Session::put('restStartDisabled', true);
+        Session::put('restEndDisabled', false);
+
+        // 状態を更新してビューを返す
         $workStartDisabled = true;
         $workEndDisabled = true;
         $restStartDisabled = true;
         $restEndDisabled = false;
+
         return view('index', compact('workStartDisabled', 'workEndDisabled', 'restStartDisabled', 'restEndDisabled', 'userName'));
     }
 
-
-
     public function afterEndRest(Request $request)
     {
-        // ログインしているユーザーのIDを取得
         $userId = auth()->id();
-
         $userName = Auth::user()->name;
-
-        // 現在の日付と時刻を取得
         $currentDate = now()->format('Y-m-d');
         $currentTime = now()->format('H:i:s');
 
-        // ユーザーの最新の作業データを取得
         $work = Work::where('user_id', $userId)
             ->where('work_date', $currentDate)
             ->first();
 
-        // 作業が存在する場合にのみ、休憩データを取得
         if ($work) {
-            // 最後の休憩データを取得
             $rest = Rest::where('work_id', $work->id)
-                ->whereNull('break_end_time') // 終了時間がまだ設定されていないレコードを取得
+                ->whereNull('break_end_time')
                 ->first();
 
             if ($rest) {
-                // 終了時間を更新
                 $rest->break_end_time = $currentTime;
                 $rest->save();
             } else {
@@ -155,10 +158,17 @@ class AuthController extends Controller
             return redirect()->back()->withErrors(['message' => '作業データが見つかりません。先に作業を登録してください。']);
         }
 
+        // セッションに状態を保存
+        Session::put('restStartDisabled', false);
+        Session::put('restEndDisabled', true);
+
+        // 状態を更新してビューを返す
         $workStartDisabled = true;
         $workEndDisabled = false;
         $restStartDisabled = false;
         $restEndDisabled = true;
+
         return view('index', compact('workStartDisabled', 'workEndDisabled', 'restStartDisabled', 'restEndDisabled', 'userName'));
     }
 }
+
