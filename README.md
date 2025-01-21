@@ -48,11 +48,11 @@ ER図
 
 １，リポジトリのクローン（Guthub）
 
-'''
+```
 git clone　https://github.com/your-username/your-repository.git](https://github.com/tontonkun/Atte.git)
 
 cd your-repository
-'''
+```
 
 ２，コンテナ立ち上げ（Docker Compose）
 
@@ -60,25 +60,25 @@ cd your-repository
 
 ３，環境設定ファイルのコピー
 
-'cp .env .env'
+`cp .env .env`
 
 ４，アプリケーションキー作成
 
-'docker-compose exec app php artisan key:generate'
+`docker-compose exec app php artisan key:generate`
 
 ５，データベースのマイグレーション
 
-'''
+```
 docker-compose exec php bash
 
 php artisan migrate
-'''
+```
 
 
 
 ※MySQLの接続設定
 
-'''
+```
 DB_CONNECTION=mysql
 
 DB_HOST=mysql
@@ -90,7 +90,7 @@ DB_DATABASE=laravel_db
 DB_USERNAME=laravel_user
 
 DB_PASSWORD=laravel_pass
-'''
+```
 
 
 
