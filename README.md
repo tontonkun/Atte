@@ -22,17 +22,11 @@ Attendance Management
 ## 使用技術
 
 Laravel 8.x
-
 Github
-
 Docker
-
 MySQL
-
 HTML,CSS
-
 PHP
-
 ER図
 
 ## テーブル設計
@@ -75,6 +69,8 @@ docker-compose exec app php artisan key:generate
 docker-compose exec php bash
 
 php artisan migrate
+
+
 
 
 ※MySQLの接続設定
