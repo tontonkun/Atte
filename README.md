@@ -7,12 +7,15 @@ Attendance Management
 某企業の勤怠情報の管理
 
 ## URL
-お問い合わせフォーム：http://localhost/
-お問い合わせフォームの確認画面：http://localhost/confirm
-サンクスページ：http://localhost/contacts
-登録ページ：http://localhost/register
-ログインページ：http://localhost/login
-管理画面：http://localhost/admin
+勤怠入力フォーム：http://localhost/
+
+勤怠一覧：http://localhost/confirm](http://localhost/time_record)
+
+ユーザー一覧：http://localhost/contacts](http://localhost/user_list)
+
+会員登録ページ：http://localhost/register](http://localhost/register)
+
+ログインページ：http://localhost/login](http://localhost/login)
 
 ## 機能一覧
 
@@ -31,10 +34,52 @@ ER図
 
 
 # 環境構築
+
+## 以下のツールをインストールしてください：
+
+・Docker: Docker公式サイトからインストール
+
+・Docker Compose: Dockerに含まれているはずですが、必要に応じてインストール方法を確認
+
+・Git: Git公式サイトからインストール
+
+## インストール手順
+
+１，リポジトリのクローン（Guthub）
+
+git clone https://github.com/your-username/your-repository.git
+
+cd your-repository
+
+２，コンテナ立ち上げ（Docker Compose）
+
+docker-compose up -d
+
+３，環境設定ファイルのコピー
+
+cp .env .env
+
+４，アプリケーションキー作成
+
+docker-compose exec app php artisan key:generate
+
+５，データベースのマイグレーション
+
 docker-compose exec php bash
-composer install
-.env.exampleより.env作成。環境変数も変更
-php artisan key:generate
+
 php artisan migrate
-php artisan db:seed
+
+
+※MySQLの接続設定
+
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=laravel_db
+DB_USERNAME=laravel_user
+DB_PASSWORD=laravel_pass
+
+
+
+
 
