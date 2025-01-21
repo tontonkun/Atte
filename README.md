@@ -56,7 +56,7 @@ cd your-repository
 
 ２，コンテナ立ち上げ（Docker Compose）
 
-'docker-compose up -d'
+`docker-compose up -d`
 
 ３，環境設定ファイルのコピー
 
