@@ -1,7 +1,8 @@
 # アプリケーション名
 Attendance Management
 
-![image](https://github.com/user-attachments/assets/58f8d71b-ddc7-4ddd-b8ed-f224aaf8fe1e)
+![image](https://github.com/user-attachments/assets/61632177-7265-435a-bf66-5a542b033a8b)
+
 
 # 作成目的
 某企業の勤怠情報の管理
