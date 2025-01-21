@@ -48,7 +48,7 @@ ER図
 
 １，リポジトリのクローン（Guthub）
 
-git clone https://github.com/your-username/your-repository.git
+'git clone https://github.com/your-username/your-repository.git
 
 cd your-repository
 
