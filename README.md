@@ -20,12 +20,19 @@ Attendance Management
 ## 機能一覧
 
 ## 使用技術
+
 Laravel 8.x
+
 Github
+
 Docker
+
 MySQL
+
 HTML,CSS
+
 PHP
+
 ER図
 
 ## テーブル設計
