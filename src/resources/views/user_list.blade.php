@@ -12,7 +12,7 @@
     </form>
     <form class="form" action="/time_record" method="GET">
         @csrf
-        <button class="header-nav__button">日付一覧</button>
+        <button class="header-nav__button">勤怠一覧</button>
     </form>
     <form class="form" action="/user_list" method="GET">
         @csrf
@@ -45,8 +45,8 @@
             <td>{{ $user->created_at }}</td>
             <td>{{ $user->updated_at }}</td>
             <td>
-                <form action="/time_record_forOtherUsers" method="GET">
-                    @csrf
+                <form action="/time_record_forOneUser" method="GET">
+                    <input type="hidden" name="user_id" value="{{ $user->id }}">
                     <button class="work_detail">勤怠詳細</button>
                 </form>
             </td>

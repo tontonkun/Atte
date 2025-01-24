@@ -12,7 +12,7 @@
     </form>
     <form class="form" action="/time_record" method="GET">
         @csrf
-        <button class="header-nav__button">日付一覧</button>
+        <button class="header-nav__button">勤怠一覧</button>
     </form>
     <form class="form" action="/user_list" method="GET">
         @csrf
@@ -28,7 +28,7 @@
 @section('content')
 
 <div class="titleArea">
-
+    <!-- 昨日の勤務情報へ移動 -->
     <form action="/time_record_yesterday" method="GET">
         @csrf
         <input type="hidden" name="date" value="{{ $work_date }}">
@@ -38,13 +38,13 @@
 
     <div class="title">{{ $user->name }} の勤怠情報 - {{ $work_date }}</div>
 
+    <!-- 明日の勤務情報へ移動 -->
     <form action="/time_record_tomorrow" method="GET">
         @csrf
         <input type="hidden" name="date" value="{{ $work_date }}">
         <input type="hidden" name="user_id" value="{{ $user->id }}">
         <button class="tomorrow">＞</button>
     </form>
-
 </div>
 
 <table class="timeRecord">
@@ -60,12 +60,14 @@
             <td>{{ $work->work_date }}</td>
             <td>{{ $work->start_at }}</td>
             <td>{{ $work->end_at }}</td>
-            <td>{{ $work->formatted_duration }}</td>
-            <td>{{ $work->total_work_duration }}</td>
+            <td>{{ $work->break_duration }}</td> <!-- 各勤務ごとの休憩時間を表示 -->
+            <td>{{ $work->total_work_duration }}</td> <!-- 実際の勤務時間 -->
         </tr>
     @endforeach
 </table>
-</div>
+
 <div class="pagination">
-    {{ $works->links() }} <!-- カスタムビューを指定 -->
-    @endsection
+    {{ $works->appends(['date' => $work_date, 'user_id' => $user->id])->links() }}
+</div>
+
+@endsection

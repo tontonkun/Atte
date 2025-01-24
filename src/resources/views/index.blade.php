@@ -12,7 +12,7 @@
     </form>
     <form class="form" action="/time_record" method="GET">
         @csrf
-        <button class="header-nav__button">日付一覧</button>
+        <button class="header-nav__button">勤怠一覧</button>
     </form>
     <form class="form" action="/user_list" method="GET">
         @csrf

@@ -23,12 +23,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/start_rest', [AuthController::class, 'afterStartRest']);
     Route::post('/end_rest', [AuthController::class, 'afterEndRest']);
     Route::get('/time_record', [TimeRecordController::class, 'timeRecord']);
-    Route::get('/time_record_forOtherUsers/{id}', [TimeRecordController::class, 'timeRecord_forOtherUsers']);
+    Route::get('/time_record_forOneUser', [TimeRecordController::class, 'timeRecord_forOneUser']);
 
     // 昨日と明日のルートを追加
     Route::get('/time_record_yesterday', [TimeRecordController::class, 'yesterday']);
     Route::get('/time_record_tomorrow', [TimeRecordController::class, 'tomorrow']);
+
+    // ユーザーリスト関連のルート
+    Route::get('/user_list', [UserListController::class, 'UserList']);
 });
 
-// ユーザーリスト関連のルート
-Route::get('/user_list', [UserListController::class, 'UserList']);
+
