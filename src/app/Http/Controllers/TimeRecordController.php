@@ -52,7 +52,7 @@ class TimeRecordController extends Controller
    {
       return Work::where('user_id', $userId)
          ->whereDate('work_date', $work_date)
-         ->with(['rests']) // 'user' は不要
+         ->with(['rests'])
          ->paginate(5)
          ->appends(['date' => $work_date, 'user_id' => $userId]);
    }
@@ -60,7 +60,6 @@ class TimeRecordController extends Controller
    private function calculateDurations($works)
    {
       foreach ($works as $work) {
-         // dd($work->rests); // まずリレーションが正しくロードされているか確認
          if ($work->start_at && $work->end_at) {
             $start = Carbon::parse($work->start_at);
             $end = Carbon::parse($work->end_at);
@@ -68,27 +67,24 @@ class TimeRecordController extends Controller
             $this->totalDuration += $duration;
 
             $breakDuration = 0;
+
             foreach ($work->rests as $rest) {
-               if ($rest->break_start_at && $rest->break_end_at) {
-                  $breakStart = Carbon::parse($rest->break_start_at);
-                  $breakEnd = Carbon::parse($rest->break_end_at);
+               if ($rest->break_start_time && $rest->break_end_time) {
+                  $breakStart = Carbon::parse($rest->break_start_time);
+                  $breakEnd = Carbon::parse($rest->break_end_time);
                   $breakDuration += $breakEnd->diffInSeconds($breakStart);
                }
             }
 
-            // ここでddを追加して休憩時間を確認
-            // dd($work, $breakDuration);
-
             $totalWorkDuration = $duration - $breakDuration;
             $work->total_work_duration = $this->formatDuration($totalWorkDuration);
-            $work->break_duration = $this->formatDuration($breakDuration);
+            $work->break_duration = $this->formatDuration($breakDuration); // 追加
          } else {
             $work->total_work_duration = '勤務中';
-            $work->break_duration = '休憩中';
+            $work->break_duration = '休憩中'; // 追加
          }
       }
    }
-
 
    private function formatDuration($seconds)
    {
