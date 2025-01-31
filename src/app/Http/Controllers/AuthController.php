@@ -171,4 +171,3 @@ class AuthController extends Controller
         return view('index', compact('workStartDisabled', 'workEndDisabled', 'restStartDisabled', 'restEndDisabled', 'userName'));
     }
 }
-
