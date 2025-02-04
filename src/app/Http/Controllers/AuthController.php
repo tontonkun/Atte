@@ -83,21 +83,36 @@ class AuthController extends Controller
             return redirect()->back()->withErrors('現在の作業が見つかりません。');
         }
 
-        // セッションに状態を保存
-        Session::put('workStartDisabled', false);
-        Session::put('workEndDisabled', true);
-        Session::put('restStartDisabled', true);
-        Session::put('restEndDisabled', true);
+        // セッションから前回の更新日を取得
+        $previousDate = Session::get('previousDate', $currentDate);
+
+        // 日付が変わったかどうかをチェック
+        if ($previousDate !== $currentDate) {
+            // 日付が変わった場合にセッション状態を更新
+            Session::put('workStartDisabled', false);
+            Session::put('workEndDisabled', true);
+            Session::put('restStartDisabled', true);
+            Session::put('restEndDisabled', true);
+
+            // 更新された日付をセッションに保存
+            Session::put('previousDate', $currentDate);
+        } else {
+            // 日付が変わらない場合はすべてをtrueに設定
+            Session::put('workStartDisabled', true);
+            Session::put('workEndDisabled', true);
+            Session::put('restStartDisabled', true);
+            Session::put('restEndDisabled', true);
+        }
 
         // 状態を更新してビューを返す
-        $workStartDisabled = false;
-        $workEndDisabled = true;
-        $restStartDisabled = true;
-        $restEndDisabled = true;
+        $workStartDisabled = Session::get('workStartDisabled');
+        $workEndDisabled = Session::get('workEndDisabled');
+        $restStartDisabled = Session::get('restStartDisabled');
+        $restEndDisabled = Session::get('restEndDisabled');
 
         return view('index', compact('workStartDisabled', 'workEndDisabled', 'restStartDisabled', 'restEndDisabled', 'userName'));
     }
-
+    
     public function afterStartRest(Request $request)
     {
         $userId = auth()->id();

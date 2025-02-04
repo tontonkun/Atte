@@ -28,50 +28,30 @@
 @section('content')
 
 <div class="titleArea">
-    <!-- 昨日の勤務情報へ移動 -->
-    <form action="/time_record_yesterday" method="GET">
-        @csrf
-        <input type="hidden" name="date" value="{{ $work_date }}">
-        <button class="yesterday">＜</button>
-    </form>
-
-    <div class="title">勤怠一覧 - {{ $work_date }}</div>
-
-    <!-- 明日の勤務情報へ移動 -->
-    <form action="/time_record_tomorrow" method="GET">
-        @csrf
-        <input type="hidden" name="date" value="{{ $work_date }}">
-        <button class="tomorrow">＞</button>
-    </form>
+    <div class="title">{{ $user->name }} の勤怠情報 - {{ $work_date }}</div>
 </div>
 
 <table class="timeRecord">
     <tr>
-        <th>Work ID</th>
-        <th>ユーザー名</th>
         <th>日付</th>
         <th>勤務開始</th>
         <th>勤務終了</th>
         <th>休憩時間</th>
         <th>勤務時間</th>
     </tr>
-
     @foreach ($works as $work)
         <tr>
-            <td>{{ $work->id }}</td>
-            <td>{{ $work->user->name }}</td>
             <td>{{ $work->work_date }}</td>
             <td>{{ $work->start_at }}</td>
             <td>{{ $work->end_at }}</td>
-            <td>{{ $work->break_duration }}</td>
-            <td>{{ $work->total_work_duration }}</td>
+            <td>{{ $work->break_duration }}</td> <!-- 各勤務ごとの休憩時間を表示 -->
+            <td>{{ $work->total_work_duration }}</td> <!-- 実際の勤務時間 -->
         </tr>
     @endforeach
 </table>
 
-<!-- ページネーションリンクを全体に対して表示 -->
 <div class="pagination">
-    {{ $works->appends(['date' => $work_date])->links() }}
+    {{ $works->appends(['date' => $work_date, 'user_id' => $user->id])->links() }}
 </div>
 
 @endsection

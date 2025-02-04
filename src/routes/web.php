@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TimeRecordController;
+use App\Http\Controllers\TimeRecordForOneUserController;
 use App\Http\Controllers\UserListController;
 
 /*
@@ -23,7 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/start_rest', [AuthController::class, 'afterStartRest']);
     Route::post('/end_rest', [AuthController::class, 'afterEndRest']);
     Route::get('/time_record', [TimeRecordController::class, 'timeRecord']);
-    Route::get('/time_record_forOneUser', [TimeRecordController::class, 'timeRecord_forOneUser']);
+    Route::get('/time_record_forOneUser', [TimeRecordForOneUserController::class, 'timeRecord_forOneUser']);
 
     // 昨日と明日のルートを追加
     Route::get('/time_record_yesterday', [TimeRecordController::class, 'yesterday']);

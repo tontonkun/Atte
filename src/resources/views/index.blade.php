@@ -29,7 +29,11 @@
 
 <div class="titleArea">
     <div class="title">
-        {{ $userName }}さん　お疲れ様！
+        @if ($workStartDisabled && $workEndDisabled && $restStartDisabled && $restEndDisabled)
+            {{ $userName }}さん 今日の勤務は終了しています　<br>お疲れ様でした！
+        @else
+            {{ $userName }}さん　お疲れ様です！
+        @endif
     </div>
 </div>
 
